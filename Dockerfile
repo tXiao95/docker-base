@@ -31,6 +31,7 @@ RUN mkdir -p $HOME/.R/ \
 RUN install2.r --error --deps TRUE \
     rstan \
 	loo \
+        spdep \
 	bayesplot \
     rstanarm \
     rstantools \
