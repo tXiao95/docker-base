@@ -1,4 +1,4 @@
-FROM rocker/verse:latest
+FROM rocker/geospatial:latest
 
 
 # install helper packages
