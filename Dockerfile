@@ -30,9 +30,8 @@ RUN mkdir -p $HOME/.R/ \
 # Install rstan
 RUN install2.r --error --deps TRUE \
     rstan \
-	loo \
-        spdep \
-	bayesplot \
+    loo \
+    bayesplot \
     rstanarm \
     rstantools \
     shinystan \
