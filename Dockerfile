@@ -9,6 +9,7 @@ RUN R -e "install.packages('devtools', repos = 'http://cran.us.r-project.org')"
 RUN install2.r --error --deps TRUE \
     TMB \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+RUN R -e "remotes::install_github('mlysy/TMBtools', dependencies = TRUE)"
 
 # install rstan related packages
 # based off of Dockerfile from https://hub.docker.com/r/jrnold/rstan/dockerfile
