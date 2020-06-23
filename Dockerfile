@@ -47,6 +47,12 @@ RUN installGithub.r --deps TRUE \
     ihmeuw-demographics/hierarchyUtils \
     ihmeuw-demographics/demCore \
     ihmeuw-demographics/demViz \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
+# install 'ihmeuw-demographics/popMethods' R package from github while ignoring warning about not overwriting Makevars file
+ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
+RUN installGithub.r --deps TRUE \
     ihmeuw-demographics/popMethods \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS=false
 
