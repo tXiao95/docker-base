@@ -5,11 +5,13 @@ FROM rocker/geospatial:latest
 RUN R -e "install.packages('remotes', repos = 'http://cran.us.r-project.org')"
 RUN R -e "install.packages('devtools', repos = 'http://cran.us.r-project.org')"
 
+
 # install tmb related packages
 RUN install2.r --error --deps TRUE \
     TMB \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 RUN R -e "remotes::install_github('mlysy/TMBtools', dependencies = TRUE)"
+
 
 # install rstan related packages
 # based off of Dockerfile from https://hub.docker.com/r/jrnold/rstan/dockerfile
@@ -39,10 +41,15 @@ RUN install2.r --error --deps TRUE \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
 
-# install 'ihmeuw-demographics' R packages from github
-RUN R -e "remotes::install_github('ihmeuw-demographics/demUtils', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/hierarchyUtils', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/demCore', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/demViz', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/popMethods', dependencies = TRUE)"
+# install base 'ihmeuw-demographics' R packages from github
+RUN installGithub.r --error --deps TRUE \
+    ihmeuw-demographics/demUtils \
+    ihmeuw-demographics/hierarchyUtils \
+    ihmeuw-demographics/demCore \
+    ihmeuw-demographics/demViz \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
+# install 'ihmeuw-demographics' popMethods package from github without errors for warnings like normal
+RUN installGithub.r --deps TRUE \
+    ihmeuw-demographics/popMethods \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
