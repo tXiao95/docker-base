@@ -42,14 +42,11 @@ RUN install2.r --error --deps TRUE \
 
 
 # install base 'ihmeuw-demographics' R packages from github
-RUN installGithub.r --error --deps TRUE \
+RUN installGithub.r --deps TRUE \
     ihmeuw-demographics/demUtils \
     ihmeuw-demographics/hierarchyUtils \
     ihmeuw-demographics/demCore \
     ihmeuw-demographics/demViz \
-    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
-
-# install 'ihmeuw-demographics' popMethods package from github without errors for warnings like normal
-RUN installGithub.r --deps TRUE \
     ihmeuw-demographics/popMethods \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
