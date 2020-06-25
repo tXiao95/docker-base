@@ -1,14 +1,17 @@
-FROM rocker/verse:latest
+FROM rocker/geospatial:latest
 
 
 # install helper packages
 RUN R -e "install.packages('remotes', repos = 'http://cran.us.r-project.org')"
 RUN R -e "install.packages('devtools', repos = 'http://cran.us.r-project.org')"
 
+
 # install tmb related packages
 RUN install2.r --error --deps TRUE \
     TMB \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+RUN R -e "remotes::install_github('mlysy/TMBtools', dependencies = TRUE)"
+
 
 # install rstan related packages
 # based off of Dockerfile from https://hub.docker.com/r/jrnold/rstan/dockerfile
@@ -29,8 +32,8 @@ RUN mkdir -p $HOME/.R/ \
 # Install rstan
 RUN install2.r --error --deps TRUE \
     rstan \
-	loo \
-	bayesplot \
+    loo \
+    bayesplot \
     rstanarm \
     rstantools \
     shinystan \
@@ -38,10 +41,17 @@ RUN install2.r --error --deps TRUE \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
 
-# install 'ihmeuw-demographics' R packages from github
-RUN R -e "remotes::install_github('ihmeuw-demographics/demUtils', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/hierarchyUtils', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/demCore', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/demViz', dependencies = TRUE)"
-RUN R -e "remotes::install_github('ihmeuw-demographics/popMethods', dependencies = TRUE)"
+# install base 'ihmeuw-demographics' R packages from github
+RUN installGithub.r --deps TRUE \
+    ihmeuw-demographics/demUtils \
+    ihmeuw-demographics/hierarchyUtils \
+    ihmeuw-demographics/demCore \
+    ihmeuw-demographics/demViz \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
+# install 'ihmeuw-demographics/popMethods' R package from github while ignoring warning about not overwriting Makevars file
+RUN export R_REMOTES_NO_ERRORS_FROM_WARNINGS=true \
+    && installGithub.r \
+    ihmeuw-demographics/popMethods \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
