@@ -1,4 +1,4 @@
-FROM rocker/geospatial:latest
+FROM rocker/geospatial:4.0.2
 
 
 # install helper packages
