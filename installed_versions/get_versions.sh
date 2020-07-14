@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # get pull-request number used in docker image tag as described https://github.com/docker/build-push-action#tag_with_ref
-TAG_WITH_REF=$GITHUB_REF
-TAG_WITH_REF=${TAG_WITH_REF/refs\/pull\/}
-TAG_WITH_REF=${TAG_WITH_REF/\/merge}
+TAG_WITH_REF="${GITHUB_REF//[!0-9]/}"
 
 # output the version of R installed
 docker run ihmeuwdemographics/base:pr-$TAG_WITH_REF-merge R --version >> installed_versions/R_version.txt
