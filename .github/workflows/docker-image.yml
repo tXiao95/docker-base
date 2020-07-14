@@ -25,11 +25,11 @@ jobs:
         push: ${{ startsWith(github.ref, 'refs/tags/') }}
 
     - name: Identify package versions
-      if: github.event_name == pull_request
+      if: ${{ github.event_name == 'pull_request' }}
       run: |
         sh ./installed_versions/get_versions.sh
 
     - uses: stefanzweifel/git-auto-commit-action@v4
-      if: github.event_name == pull_request
+      if: ${{ github.event_name == 'pull_request' }}
       with:
         commit_message: "Update software/package versions included in PR"
